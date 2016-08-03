@@ -13,7 +13,24 @@ a {
 	line-height: 40px;
 }
 
+.indexDiv {
+	margin-left: 100px;
+}
+
 nav {
 	float: left;
 }
+
+.login {
+	margin-left: 100px;
+}
+
+.lf {
+	float: left;
+}
+
+.rf {
+	float: right;
+}
+
 
