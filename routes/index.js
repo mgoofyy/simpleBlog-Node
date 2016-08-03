@@ -12,7 +12,10 @@ exports.reg = function(req, res) {
 };
 
 exports.login = function(req, res) {
-	res.render('login', {title: 'login'});
+	var name = req.body.name;
+	console.log(req.body.name);
+	res.render('login', {title: name});
+
 };
 
 exports.logout = function(req, res) {
