@@ -10,7 +10,7 @@ var http = require('http');
 var path = require('path');
 var MongoStore = require('connect-mongo')(express);
 var setting = require('./setting');
-
+var flash = require('connect-flash');
 var app = express();
 
 // all environments
@@ -35,7 +35,7 @@ app.use(express.session({
     url: 'mongodb://localhost/zhangsan'
 	})
 }));
-
+app.use(flash());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 

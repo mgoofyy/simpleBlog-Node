@@ -23,7 +23,7 @@ exports.reg = function(req, res) {
 	console.log(name + ' ' + password + ' ' +email )
 
 	var md5 = crypto.createHash('md5');
-	// password = md5.update(req.body.password).digest('hex');
+	password = md5.update(req.body.password).digest('hex');
 	console.log('------md5----' + password);
 
 	var newUser = new User({
@@ -31,15 +31,30 @@ exports.reg = function(req, res) {
 		password : password,
 		email : email
 	});
-	newUser.save(function(error,user){
-
-		if (error) {
-
-			return res.redirect('/');
+	console.log(newUser);
+	//check
+	User.get(newUser.name,function(err,user){
+		if (err) {
+			req.flash('error','user isexist');
+			return res.redirect('reg');
 		}
+		newUser.save(function(error,user){
 
-	});
-	res.render('login',{title:'login'});
+			if (err) {
+				req.flash('error',err);
+				return res.redirect('reg');
+			}
+
+			req.session.user = user;
+			req.flash('success','register success');
+			res.redirect('/');
+
+		});
+	
+	})
+
+	
+	// res.redirect('login',{title:'register success'});
 };
 
 exports.login = function(req, res) {

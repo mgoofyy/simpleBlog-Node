@@ -46,12 +46,12 @@ User.prototype.save = function(callback) {
 
 
 User.get = function(name,callback) {
-	mongodb.open('user',function(err,db){
+	mongodb.open(function(err,db){
 		if (err) {
+			console.log('--------------------');
 			return callback(err);
-			}
 		}
-		db.collection('user',function(err,collection){
+		db.collection('users',function(err,collection){
 			if (err) {
 				mongodb.close();
 				return callback(err);
@@ -59,11 +59,12 @@ User.get = function(name,callback) {
 			collection.findOne({
 				name:name
 			},function(err,user){
+				mongodb.close();
 				if (err) {
-					mongodb.close();
+					
 					return callback(err);
 				}
-				return callback(null,user);
+				callback(null,user);
 			})
 		})
 	});
