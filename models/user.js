@@ -1,4 +1,4 @@
-var mongodb =  require('mongodb');
+var mongodb =  require('./db');
 
 function User(user) {
 	this.name = user.name;
@@ -8,22 +8,27 @@ function User(user) {
 
 module.exports = User;
 
-User.prototype.save = fucntion(callback) {
+User.prototype.save = function(callback) {
 	var user = {
-		name = this.name;
-		password = this.password;
-		email = this.password;
+		name : this.name,
+		password : this.password,
+		email : this.email
 	};
+			
+		console.log(user);	
 
 	mongodb.open(function(err,db) {
 		if (err) {
 			return callback(err);
 		}
+
 		db.collection('users',function(err,collection){
+			
 			if (err) {
 				mongodb.close();
 				return callback(err);
 			}
+
 			collection.insert(user,{
 				safe:true,
 			},function(err,user){
@@ -31,18 +36,20 @@ User.prototype.save = fucntion(callback) {
 				if (err) {
 					return callback(err);
 				}
-				return callback(null,user[0]);
+				console.log(user);
+				callback(null,user[0]);
 			});
 		});
 
 	});
-}
+};
 
 
 User.get = function(name,callback) {
 	mongodb.open('user',function(err,db){
 		if (err) {
 			return callback(err);
+			}
 		}
 		db.collection('user',function(err,collection){
 			if (err) {

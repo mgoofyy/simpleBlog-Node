@@ -32,7 +32,7 @@ app.use(express.session({
 		db: setting.db,
 		host: setting.host,
     port: setting.port,
-    url: 'mongodb://localhost/blog'
+    url: 'mongodb://localhost/zhangsan'
 	})
 }));
 
