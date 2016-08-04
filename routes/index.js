@@ -59,9 +59,29 @@ exports.reg = function(req, res) {
 
 exports.login = function(req, res) {
 	var name = req.body.name;
-	console.log(req.body.name);
-	res.render('login', {title: name});
+	var password = req.body.password;
+	if (password != undefined) {
+		var md5 = crypto.createHash('md5');
+		password = md5.update(req.body.password).digest('hex');
 
+	} else {
+		return res.render('login',{'title':'please login with your name and password'});
+	}
+
+	User.get(name,function(error,user){
+		if (!user) {
+			req.flash('error','user is not in sql');
+			res.render('index', {title: name});
+			return;
+		}
+		if (user.password != password) {
+			req.flash('error','password is error');
+			return res.redirect('/login');
+		}
+		req.session.user = user;
+		req.flash('success','login success');
+		res.redirect('/');
+	});
 };
 
 exports.logout = function(req, res) {
