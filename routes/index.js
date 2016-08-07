@@ -5,19 +5,28 @@
 var crypto = require('crypto');
 var User   = require('../models/user.js');
 
+//首页返回index.ejs
 exports.index = function(req, res){
   res.render('index', { title: 'Express' });
 };
 
+//注册页返回注册页面，并处理请求
 exports.reg = function(req, res) {
+	//对当前请求进行判断
+	if(isEmptyObject(req.body)) {
+		//当前是get请求
+		return res.render('reg',{'title':'Register page'})
+	}
+
+	console.log(req.body);
 	var name = req.body.name;
 	var password = req.body.password;
 	var password2 = req.body['password-repeat'];
 	var email = req.body.email;
-
-	if (name == undefined) {
-		console.log('当前没有输入用户名');
-		return res.render('reg',{title:'please Renty again'});
+	console.log(name + '   '  +  password + ' ' + password2 + '  ' + email);
+	if ((name == undefined) || (password == undefined) || (email == undefined) || (password2 == undefined)) {
+		console.log('当前没有输入账户信息');
+		return res.render('reg', {title: 'Please Input YOUR Count Info and Renter'});
 	}
 
 	console.log(name + ' ' + password + ' ' +email )
@@ -91,3 +100,10 @@ exports.logout = function(req, res) {
 exports.error = function(req, res) {
 	res.render('error', {title: '404'});
 };
+
+function isEmptyObject(obj){
+	for (var n in obj) {
+		return false
+	}
+	return true;
+}
