@@ -7,7 +7,7 @@ var User   = require('../models/user.js');
 
 //首页返回index.ejs
 exports.index = function(req, res){
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Express' ,'user':req.session.user});
 };
 
 //注册页返回注册页面，并处理请求
@@ -15,7 +15,7 @@ exports.reg = function(req, res) {
 	//对当前请求进行判断
 	if(isEmptyObject(req.body)) {
 		//当前是get请求
-		return res.render('reg',{'title':'Register page'})
+		return res.render('reg',{'title':'Register page','user':req.session.user})
 	}
 
 	console.log(req.body);
@@ -26,14 +26,18 @@ exports.reg = function(req, res) {
 	console.log(name + '   '  +  password + ' ' + password2 + '  ' + email);
 	if ((name == undefined) || (password == undefined) || (email == undefined) || (password2 == undefined)) {
 		console.log('当前没有输入账户信息');
-		return res.render('reg', {title: 'Please Input YOUR Count Info and Renter'});
+		return res.render('reg', {title: 'Please Input YOUR Count Info and Renter','user':req.session.user});
 	}
 
-	console.log(name + ' ' + password + ' ' +email )
+	if(password != password2) {
+		return res.render('reg', {title: 'this password is not the same as your password-repeqat','user':req.session.user});
+	}
+
+	console.log(name + ' ' + password + password2 + ' ' +email )
 
 	var md5 = crypto.createHash('md5');
 	password = md5.update(req.body.password).digest('hex');
-	console.log('------md5----' + password);
+	console.log('------md5------' + password);
 
 	var newUser = new User({
 		name : name,
@@ -54,7 +58,8 @@ exports.reg = function(req, res) {
 				return res.redirect('reg');
 			}
 
-			req.session.user = user;
+			req.session.user = newUser;
+			console.log('_____________' + req.session.user);
 			req.flash('success','register success');
 			res.redirect('/');
 
@@ -67,6 +72,11 @@ exports.reg = function(req, res) {
 };
 
 exports.login = function(req, res) {
+
+	if(isEmptyObject(req.body)) {
+		//当前是get请求
+		return res.render('login',{'title':'Login page','user':req.session.user})
+	}
 	var name = req.body.name;
 	var password = req.body.password;
 	if (password != undefined) {
@@ -74,18 +84,18 @@ exports.login = function(req, res) {
 		password = md5.update(req.body.password).digest('hex');
 
 	} else {
-		return res.render('login',{'title':'please login with your name and password'});
+		return res.render('login',{'title':'please login with your name and password','user':req.session.user});
 	}
 
 	User.get(name,function(error,user){
 		if (!user) {
 			req.flash('error','user is not in sql');
-			res.render('index', {title: name});
+			res.render('index', {title: name,'user':req.session.user});
 			return;
 		}
 		if (user.password != password) {
 			req.flash('error','password is error');
-			return res.redirect('/login');
+			return res.render('login',{title: 'password is error','user':req.session.user});
 		}
 		req.session.user = user;
 		req.flash('success','login success');
@@ -94,11 +104,12 @@ exports.login = function(req, res) {
 };
 
 exports.logout = function(req, res) {
-	res.render('logout', {title: 'logout'});
+	req.session.user = null;
+	res.render('logout', {title: 'logout','user': req.session.user});
 };
 
 exports.error = function(req, res) {
-	res.render('error', {title: '404'});
+	res.render('error', {title: '404','user':req.session.user});
 };
 
 function isEmptyObject(obj){
