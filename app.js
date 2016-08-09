@@ -12,6 +12,7 @@ var MongoStore = require('connect-mongo')(express);
 var setting = require('./setting');
 var flash = require('connect-flash');
 var app = express();
+var Post = require('./models/Post');
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -55,6 +56,16 @@ app.post('/logout',routes.logout);
 app.get('/error',routes.error);
 app.post('/error',routes.error);
 
+////test
+//var newPost = new Post('zhangsan','lisi','wangwu');
+//
+//newPost.save(function(err){
+//    if(err) {
+//        console.log('this is my log save successful');
+//    } else {
+//        console.log('save is error' + err);
+//    }
+//});
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

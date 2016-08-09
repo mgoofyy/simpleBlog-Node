@@ -8,11 +8,21 @@
 </head>
 <body>
 <h1><%= title %></h1>
+<% if (user) { %>
+<h1>welcome <%=  user['name'] %></h1>
+<% } %>
+
 <div class="nav">
 	<nav>
 		<span><a href="/" title="HOME">HOME</a></span>
+		<% if (user) { %>
+
+		<span><a href="/postContent">PostContent</a> </span>
+		<span><a href="/logout">Logout</a> </span>
+		<% } else { %>
 		<span><a href="/reg" title="reg">Register</a></span>
 		<span><a href="/login" title="Login">Login</a></span>
+		<% } %>
 	</nav>
 </div>
 
