@@ -4,6 +4,7 @@
  */
 var crypto = require('crypto');
 var User   = require('../models/user.js');
+var Post = require('../models/Post.js');
 
 //首页返回index.ejs
 exports.index = function(req, res){
@@ -112,6 +113,26 @@ exports.error = function(req, res) {
 	res.render('error', {title: '404','user':req.session.user});
 };
 
+exports.post = function(req, res) {
+	if(isEmptyObject(req.body)) {
+		//当前是get请求
+		return res.render('post',{title:'Post Page','user':req.session.user});
+	}
+	console.log(req.body);
+//创建模型
+	var post = new Post(req.body['title'],req.body['post',req.body['name']]);
+	post.save(function(err){
+		if(err) {
+			console.log('保存失败');
+		}
+		else {
+			console.log('保存成功');
+		}
+	});
+
+};
+
+//检查字典是否为空
 function isEmptyObject(obj){
 	for (var n in obj) {
 		return false

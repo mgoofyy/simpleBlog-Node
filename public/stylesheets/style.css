@@ -7,6 +7,10 @@ a {
   color: #00B7FF;
 }
 
+.header {
+	color: deepskyblue;
+}
+
 .nav {
 	float: left;
 	width: 40px;
@@ -14,12 +18,36 @@ a {
 }
 
 .indexDiv {
-	margin-left: 100px;
+	margin-left: 150px;
 }
 
 nav {
 	float: left;
+
+	background-color: #00B7FF;
 }
+
+nav span {
+	margin: 10px 20px;
+}
+
+a{
+	text-decoration:none;
+}
+
+a:link {
+	color: #ffffff;
+}
+
+a:visited {
+	color: #fff;
+}
+
+a:hover {
+	color: #000;
+
+}
+
 
 .login {
 	margin-left: 100px;
@@ -31,6 +59,13 @@ nav {
 
 .rf {
 	float: right;
+}
+
+.button {
+	background-color: orange;
+	color: #ffffff;
+	font-size: 18px;
+	border: none;
 }
 
 
